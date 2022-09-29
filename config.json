@@ -1,0 +1,1 @@
+{"url": "wss://hack.chat/chat-ws","prefix":"^", "owner": "your-trip", "op": [], "nick": "ZhangShell", "channel": "your-channel", "bannedcmd": ["config.json","main.py"]}
