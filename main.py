@@ -11,7 +11,7 @@ class client:
         self.ws = websocket.create_connection(self.config['url'])
         self.on = {}
         self.__send({'cmd':'join','channel':self.config['channel'],'nick':self.config['nick']})
-        self.chat(f'云电脑机器人准备就绪。\n机器人所有者的识别码：{self.config["owner"]}\n授权使用本机器人部分功能的用户：{str(self.config["op"])}\n禁止执行的命令：{str(self.config["bannedcmd"])}\n要查看帮助，请发送{self.config["prefix"]}help\n#### 仅接收授权用户的信息\n###### Made by [MrZhang365](https://mrzhang365.github.io/)')
+        self.chat(f'云电脑机器人准备就绪。\n机器人所有者的识别码：{self.config["owner"]}\n授权使用本机器人部分功能的用户：{str(self.config["op"])}\n禁止执行的命令：{str(self.config["bannedcmd"])}\n要查看帮助，请发送：`{self.config["prefix"]}help`\n#### 仅接收授权用户的信息\n###### Made by [MrZhang365](https://mrzhang365.github.io/)')
     def __send(self,packet):
         #print(packet)
         self.ws.send(json.dumps(packet))
@@ -67,7 +67,8 @@ def on_message(robot,result):
     if msg[0] != robot.config['prefix']:
         return 0
     cmdlist = msg.split()
-    cmdlist[0][0] = ''
+    new_str = cmdlist[0][1:]
+    cmdlist[0] = new_str
     if cmdlist[0] == 'restart':
         restart()
     elif cmdlist[0] == 'shell':
@@ -133,7 +134,7 @@ def on_message(robot,result):
     elif cmdlist[0] == 'listop':
         robot.chat('目前授权以下用户使用本机器人：{}'.format(str(robot.config['op'])))
     elif cmdlist[0] == 'help':
-        robot.chat('''\
+        robot.whisper(result['nick'],'''.
 | 命令名称 | 说明 |
 |-:|:-|
 |help|查看帮助|
