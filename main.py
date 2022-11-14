@@ -4,14 +4,24 @@ import json
 import sys
 import _thread as thread
 import traceback
+import requests
 
 class client:
     def __init__(self):
+        self.ver = '1.2'
         self.config = self.__read_json('config.json')
         self.ws = websocket.create_connection(self.config['url'])
         self.on = {}
+        self.token = self.config['token']
         self.__send({'cmd':'join','channel':self.config['channel'],'nick':self.config['nick']})
         self.chat(f'云电脑机器人准备就绪。\n机器人所有者的识别码：{self.config["owner"]}\n授权使用本机器人部分功能的用户：{str(self.config["op"])}\n禁止执行的命令：{str(self.config["bannedcmd"])}\n要查看帮助，请发送：`{self.config["prefix"]}help`\n#### 仅接收授权用户的信息\n###### Made by [MrZhang365](https://mrzhang365.github.io/)')
+        got = requests.get(f'https://onlineservice.zhangsoft.cf/zhangshell?ver={self.ver}&token={self.token}').json()
+        result = '小张软件云服务提示：\n'
+        if got['ver_msg']:
+            result += got['ver_msg']+'\n'
+        if got['token_msg']:
+            result += got['token_msg']
+        self.chat(result)
     def __send(self,packet):
         #print(packet)
         self.ws.send(json.dumps(packet))
